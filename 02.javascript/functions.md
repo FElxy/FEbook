@@ -4,6 +4,23 @@ index
 
 
 
+## **once**
+
+```
+once
+function once(fn, ctx) {
+let flag = true
+return function() {
+if(flag){
+flag = false
+fn.apply(ctx || this, arguments)
+return 
+}
+return undefined
+}
+}
+```
+
 
 
 ## bind
@@ -146,7 +163,206 @@ var a = null;  (!a && typeof a === 'object');//true
 
 
 
+## 数组去重
+
+```
+unique
+
+  var arr = ['f', '0', '3', 'f', 'd', '2', 'd', 'd']
+  function unique(arr) {
+      var newarr = [] //构建newarr 数组
+      var obj = {}  //构建一个对象obj
+      for (var i= 0; i< arr.length; i++) {
+          if (!obj[arr[i]]) { //如果元素跟数组对比
+              newarr.push(arr[i])
+              obj[arr[i]] = 1 // 元素内容作为对象属性
+          }
+      }
+      return newarr 
+  }
+  console.log(unique(arr)) //["f", "0", "3", "d", "2"]
+
+  var arr = ['f', '0', '3', 'f', 'd', '2', 'd', 'd']
+  var newarr = [] //定义一个新的数组
+  for (var i= 0; i< arr.length; i++) {   //遍历arr 每一项
+      if(newarr.indexOf(arr[i]) == -1) {  //判断newarr数组是否存在arr项 
+          newar.push(arr[i])  //newarr里面不存在就push
+      }
+  }
+  console.log(newarr)  //["f", "0", "3", "d", "2"]
+
+Array.from(new Set([2,3,4,2,3,4]))
+Array.from(new Set([1,1,2,'2',3])) 
+ [...new Set([1,1,2,'2',3])]
+```
+
+
+
+## flat
+
+```
+flatten
+const flattenDeep = (arr) => Array.isArray(arr)
+  ? arr.reduce( (a, b) => [...a, ...flattenDeep(b)] , [])
+  : [arr]
+
+flattenDeep([1, [[2], [3, [4]], 5]])
+```
+
+
+
+## jsonp
+
+```js
+// jsonp
+function jsonp(url, jsonpCallback, success) {
+  let script = document.createElement("script");
+  script.src = url;
+  script.async = true;
+  script.type = "text/javascript";
+  window[jsonpCallback] = function(data) {
+    success & success(data);
+  };
+  document.body.appendChild(script);
+}
+jsonp(
+  "http://xxx",
+  "callback",
+  function(value) {
+    console.log(value);
+  }
+);
+```
+
+
+
+## ajax
+
+let xhr = new XMLHttpRequest()
+
+xhr.onreadystatechange = function () {
+
+if (xhr.readyState === 4 && xhr.status === 200) {
+
+
+
+}
+
+}
+
+xhr.open('get', 'url', true)
+
+xhr.send()
+
+## delegate
+
+```
+
+		function delegate(parents, selector, eventName, fn) {
+			function bindEvent(event) {
+				const e = event || window.event
+				const currentTarget = e.currentTarget
+				let target = e.target || e.srcElement
+				while(target !== currentTarget) {
+					let t = target
+					if (target.matches(selector)) {
+						fn.apply(t, arguments)
+					}
+					target = target.parentNode
+				}
+			}
+			Array.from(document.querySelectorAll(parents)).forEach((item) => {
+				item.addEventListener(eventName, bindEvent, false)
+			})
+		}
+
+if (!Element.prototype.matches) {
+    Element.prototype.matches = 
+        Element.prototype.matchesSelector || 
+        Element.prototype.mozMatchesSelector ||
+        Element.prototype.msMatchesSelector || 
+        Element.prototype.oMatchesSelector || 
+        Element.prototype.webkitMatchesSelector ||
+        function(s) {
+            var matches = (this.document || this.ownerDocument).querySelectorAll(s),
+                i = matches.length;
+            while (--i >= 0 && matches.item(i) !== this) {}
+            return i > -1;            
+        };
+}
+```
+
+## parseParam
+
+```
+
+function parseParam(str) {
+if (typeof str !== 'string') {return}
+let paramStr = str.split('?')[1]
+if(!params) {return}
+let obj = {}
+let arr = decodeURIComponent(paramStr).split('&')
+arr.forEach(item => {
+let t = item.split('=')
+let key = t[0]
+let val = t[1] || true
+if (obj[key] === 'undefined) {
+obj[key] = val
+} else {
+let newVal = Array.isArray(obj[key]) ? obj[key] : [obj[key]]
+newVal.push(val)
+obj[key] = newVal
+}
+})
+return obj
+}
+```
+
+## ajax
+
+```js
+手写ajax
+onreadystatechange
+readyState
+0: 请求未初始化
+1: 服务器连接已建立
+2: 请求已接收
+3: 请求处理中
+4: 请求已完成，且响应已就绪
+status
+200
+404
+
+xhr.open(Method,  URL, async, user, pwd)
+method:  "GET", "POST", "PUT", "DELETE"
+
+
+const xhr = new XMLHttpRequest()
+
+xhr.onreadystartechange = function() {
+if (xhr.readyState === 4) {
+if (status === 200) {
+console.log(xhr.response)
+} else {
+console.log(xhr.status)
+}
+}
+}
+xhr.open('GET', `url`)
+xhr.send(null)
+
+```
+
+
+
 
 
 ---
 
+## 判断数组的方法
+
+### Object.prototype.toString.call()
+
+
+
+**在JS中，只有 0，-0，NaN，""，null，undefined 这六个值转布尔值时，结果为 false**

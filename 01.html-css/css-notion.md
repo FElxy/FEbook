@@ -63,6 +63,19 @@ scale-down：内容的尺寸与 `none` 或 `contain` 中的一个相同，取决
 
 ## BFC
 
+**块级格式化上下文**，是一个独立的渲染区域，让处于 BFC 内部的元素与外部的元素相互隔离，使内外元素的定位不会相互影响。
+
+触发条件：
+
+1. 根元素
+2. 浮动元素：float不为none
+3. 绝对定位元素：position为fixed、absolute
+4. overflow不为visible
+5. 行内块：display：inline-block
+6. 表格相关：display: table, table-cell...
+7. display: flex, inline-flex
+8. display: grid, inline-grid
+
 ## 盒模型
 
 box-sizing: border-box / content-box;
@@ -70,6 +83,32 @@ box-sizing: border-box / content-box;
 ## 浮动原理
 
 
+
+## 层叠上下文
+
+文档中的层叠上下文由满足以下任意一个条件的元素形成：
+
+- 根元素 (HTML),
+- z-index 值不为 "auto"的 绝对/相对定位，
+- 一个 z-index 值不为 "auto"的 flex 项目 (flex item)，即：父元素 display: flex|inline-flex，
+- [opacity](https://developer.mozilla.org/zh-CN/docs/Web/CSS/opacity) 属性值小于 1 的元素（参考 [the specification for opacity](http://www.w3.org/TR/css3-color/#transparency)），
+- [transform](https://developer.mozilla.org/zh-CN/docs/Web/CSS/transform) 属性值不为 "none"的元素，
+- [mix-blend-mode](https://developer.mozilla.org/zh-CN/docs/Web/CSS/mix-blend-mode) 属性值不为 "normal"的元素，
+- [filter](https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter)值不为“none”的元素，
+- [perspective](https://developer.mozilla.org/zh-CN/docs/Web/CSS/perspective)值不为“none”的元素，
+- [isolation](https://developer.mozilla.org/zh-CN/docs/Web/CSS/isolation) 属性被设置为 "isolate"的元素，
+- position: fixed
+- 在 [will-change](https://developer.mozilla.org/zh-CN/docs/Web/CSS/will-change) 中指定了任意 CSS 属性，即便你没有直接指定这些属性的值（参考 [这篇文章](http://dev.opera.com/articles/css-will-change-property/)）
+- [-webkit-overflow-scrolling](https://developer.mozilla.org/zh-CN/docs/Web/CSS/-webkit-overflow-scrolling) 属性被设置 "touch"的元素
+
+在层叠上下文中，其子元素同样也按照上面解释的规则进行层叠。 特别值得一提的是，其子元素的 z-index 值只在父级层叠上下文中有意义。子级层叠上下文被自动视为父级层叠上下文的一个独立单元。
+
+总结:
+
+- 给一个 HTML 元素定位和 z-index 赋值创建一个层叠上下文，（opacity 值不为 1 的也是相同）。
+- 层叠上下文可以包含在其他层叠上下文中，并且一起创建一个有层级的层叠上下文。
+- 每个层叠上下文完全独立于它的兄弟元素：当处理层叠时只考虑子元素。
+- 每个层叠上下文是自包含的：当元素的内容发生层叠后，整个该元素将会 在父层叠上下文中 按顺序进行层叠。
 
 ## z-index
 
